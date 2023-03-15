@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Console Tricks!</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
 
   <p onClick="makeGreen()">×BREAK×DOWN×</p>
@@ -19,29 +21,65 @@
     }
 
     // Regular
+    console.log("hello");
 
     // Interpolated
+    console.log("Hello I am a %s string!", "💩")
 
     // Styled
+    console.log("%c I am some great text", "font-size: 30px; background: green; text-shadow: 10px 10px 0 red");
 
     // warning!
+    console.warn("ERROR! REMAIN CALM AND CARRY ON..")
 
     // Error :|
+    console.error("Something broke. UH OH")
 
     // Info
+    console.info("FUN FACT: The Vatican's bank is the only one in existence that allows ATM users to perform transactions in Latin.")
 
     // Testing
+    const p = document.querySelector('p');
+    console.assert(p.classList.contains('ouch'), "That is incorrect! Nice Try");
 
     // clearing
+    console.clear();
 
     // Viewing DOM Elements
+    console.log(p);
+    console.dir(p);
+
+    console.clear();
 
     // Grouping together
+    dogs.forEach(dog => {
+      console.group(`${dog.name}`);
+      console.log(`This is ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age} years old`);
+      console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+      console.groupEnd(`${dog.name}`);
+
+    });
 
     // counting
+    console.count('Erik');
+    console.count('Erik');
+    console.count('Erik');
+    console.count('Michele');
+    console.count('Michele');
+    console.count('Michele');
 
     // timing
+    console.time('fetching data');
+    fetch('https://api.github.com/users/wesbos')
+    .then(data => data.json())
+    .then(data => {
+      console.timeEnd('fetching data');
+      console.log(data);
+    })
 
+    console.table(dogs);
   </script>
 </body>
+
 </html>
