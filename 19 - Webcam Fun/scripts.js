@@ -10,9 +10,9 @@ function getVideo() {
         video.srcObject = localMediaStream;
         video.play();
     })
-    .catch(err => {
-        console.error('Oh no! You need to allow access to the webcam', err);
-    });
+        .catch(err => {
+            console.error('Oh no! You need to allow access to the webcam', err);
+        });
 }
 
 function paintToCanavas() {
@@ -23,6 +23,12 @@ function paintToCanavas() {
 
     return setInterval(() => {
         ctx.drawImage(video, 0, 0, width, height);
+        // Take the pixels out
+        let pixels = ctx.getImageData(0, 0, width, height);
+        // adjust the pixels 
+        pixels = redEffect(pixels);
+        // Put the pixels back 
+        ctx.putImageData(pixels, 0, 0);
     }, 16);
 }
 
@@ -42,6 +48,17 @@ function takePhoto() {
 
 }
 
+function redEffect(pixels) {
+    for (let i = 0; i < pixels.data.length; i += 4) {
+        // red
+        pixels.data[i + 0] = pixels.data[i + 0] + 100;
+        // green
+        pixels.data[i + 1] = pixels.data[i + 1] - 50;
+        // blue
+        pixels.data[i + 2] = pixels.data[i + 2] * 0.5;
+    }
+    return pixels;
+}
 getVideo();
 
 video.addEventListener('canplay', paintToCanavas);
