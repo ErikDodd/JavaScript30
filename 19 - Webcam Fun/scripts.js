@@ -10,9 +10,9 @@ function getVideo() {
         video.srcObject = localMediaStream;
         video.play();
     })
-    .catch(err => {
-        console.error('Oh no! You need to allow access to the webcam', err);
-    });
+        .catch(err => {
+            console.error('Oh no! You need to allow access to the webcam', err);
+        });
 }
 
 function paintToCanavas() {
@@ -23,6 +23,16 @@ function paintToCanavas() {
 
     return setInterval(() => {
         ctx.drawImage(video, 0, 0, width, height);
+        // Take the pixels out
+        let pixels = ctx.getImageData(0, 0, width, height);
+        // adjust the pixels 
+        // pixels = redEffect(pixels);
+
+        // pixels = rgbSplit(pixels);
+        // ctx.globalAlpha = 0.8;
+        pixels = greenScreen(pixels);
+        // Put the pixels back 
+        ctx.putImageData(pixels, 0, 0);
     }, 16);
 }
 
@@ -40,6 +50,56 @@ function takePhoto() {
     link.innerHTML = `<img src="${data}" alt="Handsome Man" />`;
     strip.insertBefore(link, strip.firstChild);
 
+}
+
+function redEffect(pixels) {
+    for (let i = 0; i < pixels.data.length; i += 4) {
+        // red
+        pixels.data[i + 0] = pixels.data[i + 0] + 100;
+        // green
+        pixels.data[i + 1] = pixels.data[i + 1] - 50;
+        // blue
+        pixels.data[i + 2] = pixels.data[i + 2] * 0.5;
+    }
+    return pixels;
+}
+
+function rgbSplit(pixels) {
+    for (let i = 0; i < pixels.data.length; i += 4) {
+        // red
+        pixels.data[i - 150] = pixels.data[i + 0] + 100;
+        // green
+        pixels.data[i + 500] = pixels.data[i + 1] - 50;
+        // blue
+        pixels.data[i - 550] = pixels.data[i + 2] * 0.5;
+    }
+    return pixels;
+}
+
+function greenScreen(pixels) {
+    const levels = {};
+
+    document.querySelectorAll('.rgb input').forEach((input) => {
+        levels[input.name] = input.value;
+    });
+
+    for (i = 0; i < pixels.data.length; i += 4) {
+        red = pixels.data[i + 0];
+        green = pixels.data[i + 1];
+        blue = pixels.data[i + 2];
+        alpha = pixels.data[i + 3];
+
+        if (red >= levels.rmin
+            && green >= levels.gmin
+            && blue >= levels.bmin
+            && red <= levels.rmax
+            && green <= levels.gmax
+            && blue <= levels.bmax) {
+            // Take it out!
+            pixels.data[i + 3] = 0;
+        }
+    }
+    return pixels;
 }
 
 getVideo();
