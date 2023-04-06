@@ -49,6 +49,7 @@
       slider.classList.add('active');
       // console.log(e.pageX);
       startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
       console.log(startX);
     });
 
@@ -62,11 +63,13 @@
       slider.classList.remove('active');
     });
 
-    slider.addEventListener('mousemove', () => {
+    slider.addEventListener('mousemove', (e) => {
       // stops the function from running
       if(!isDown) return; 
-      console.count(isDown);
-      console.count(startX);
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 5;
+      slider.scrollLeft = scrollLeft - walk;
     });
 
 
