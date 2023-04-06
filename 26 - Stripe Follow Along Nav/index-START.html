@@ -234,7 +234,18 @@
 
     const dropdown = this.querySelector('.dropdown');
     const dropdownCoordinates = dropdown.getBoundingClientRect();
-    console.log(dropdownCoordinates);
+    const navCoordinates = nav.getBoundingClientRect();
+
+    const coordinates = {
+      height: dropdownCoordinates.height,
+      width: dropdownCoordinates.width,
+      top: dropdownCoordinates.top - navCoordinates.top,
+      left: dropdownCoordinates.left - navCoordinates.left,
+    };
+
+    background.style.setProperty('width', `${coordinates.width}px`);
+    background.style.setProperty('height', `${coordinates.height}px`);
+    background.style.setProperty('transform', `translate(${coordinates.left}px, ${coordinates.top}px)`);
   }
 
   
