@@ -73,11 +73,11 @@
     scoreBoard.textContent = 0;
     timeUp = false;
     peep();
-    setTimeout(() => timeUp = true, 2000)
+    setTimeout(() => timeUp = true, 10000)
   }
 
   function bonk(e) {
-    console.log(e);
+    if(!e.isTrusted) return;
   }
 
   moles.forEach(mole => mole.addEventListener('click', bonk));
